@@ -1,0 +1,5 @@
+/pkg/
+/src/
+/urxvt-vim-insert/
+/vim-insert
+*.tar.xz
