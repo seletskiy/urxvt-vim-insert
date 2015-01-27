@@ -1,0 +1,87 @@
+#!perl -w
+
+use strict;
+
+sub on_init {
+    my($self) = @_;
+
+    $self->{phase} = 'off';
+    $self->{paste_data} = '';
+}
+
+sub on_tt_paste {
+    my($self, $octets) = @_;
+
+    if ($self->{phase} eq 'off') {
+        if ($self->is_in_vim()) {
+            $self->tt_paste('');
+            $self->{paste_data} = $octets;
+            $self->{phase} = 'ctrl-o';
+        } else {
+            $self->tt_paste($octets);
+        }
+
+        return 1;
+    }
+}
+
+sub on_refresh_end {
+    my($self) = @_;
+
+    if ($self->{phase} eq 'ctrl-o') {
+        # vim :h i_CTRL-\_CTRL-O
+        $self->tt_paste(':if@*==""|set paste|else|call feedkeys("\"*gP","n")|endif');
+        $self->{phase} = 'paste-mode';
+        return;
+    }
+
+    if ($self->{phase} eq 'paste-mode') {
+        if ($self->is_on_paste()) {
+            $self->tt_paste($self->{paste_data});
+            $self->{phase} = 'paste-done';
+        } else {
+            $self->{paste_data} = '';
+            $self->{phase} = 'off';
+        }
+
+        return;
+    }
+
+    if ($self->{phase} eq 'paste-done') {
+        $self->tt_paste('');
+        $self->{phase} = 'paste-disable';
+        return;
+    }
+
+    if ($self->{phase} eq 'paste-disable') {
+        $self->tt_paste(':set nopaste');
+        $self->{phase} = 'off';
+        return;
+    }
+}
+
+sub is_in_vim {
+    my($self) = @_;
+
+    my $term = $self->{term};
+    my $last_line = $term->ROW_t($term->nrow-1);
+
+    if ($last_line =~ "^-- INSERT --") {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+sub is_on_paste {
+    my($self) = @_;
+
+    my $term = $self->{term};
+    my $last_line = $term->ROW_t($term->nrow-1);
+
+    if ($last_line =~ '^-- INSERT \(paste\) --') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
