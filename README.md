@@ -21,12 +21,14 @@ urxvt-vim-insert into the rescue
 ================================
 
 Just install this urxvt perl plugin, restart urxvt and all following
-Shift-Inserts will paste text as it expected to be done in XXI centure.
+Shift-Inserts will paste text as it expected to be done in XXI century.
 
 It will also work onto remote server vim. Waow.
 
 Installation
 ============
 
-Under arch, just install package from
+Under archlinux, just install package from
 [AUR](https://aur.archlinux.org/packages/urxvt-vim-insert/).
+
+Under any other distro, just copy [vim-insert](vim-insert) into rxvt-unicode extensions directory.
