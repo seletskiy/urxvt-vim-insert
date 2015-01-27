@@ -12,7 +12,8 @@ Try to insert following text into your fully configured vim using `Shift-Insert`
 
 Then, compare with following gif.
 
-![gif](https://cloud.githubusercontent.com/assets/674812/5926281/bcae01a8-a68b-11e4-9aef-3299189185ca.gif)
+![gif](https://cloud.githubusercontent.com/assets/674812/5927093/15b527c6-a692-11e4-85c1-fbe4a49c4ebc.gif)
+
 
 You can use Shift+Insert now
 ============================
