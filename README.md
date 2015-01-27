@@ -1,3 +1,17 @@
+Try to insert following text into your fully configured vim using `Shift-Insert`:
+
+```
+{
+    {
+        {
+            # madness!
+        }
+    }
+}
+```
+
+Then, compare with following gif.
+
 ![gif](https://cloud.githubusercontent.com/assets/674812/5926281/bcae01a8-a68b-11e4-9aef-3299189185ca.gif)
 
 You can use Shift+Insert now
