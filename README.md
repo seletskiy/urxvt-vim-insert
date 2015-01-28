@@ -24,7 +24,13 @@ How many times you do following sequence in vim?
 <C-O>"*p
 ```
 
-Or, even worse, this one?
+Or, if you smart one, this one?
+
+```
+<C-R>*
+```
+
+However, remote vim leaves you no choice.
 
 ```
 :set paste
