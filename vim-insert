@@ -1,6 +1,7 @@
 #!perl -w
 
 use strict;
+use File::Temp qw/tempfile/;
 
 sub on_init {
     my($self) = @_;
@@ -12,17 +13,49 @@ sub on_init {
 sub on_tt_paste {
     my($self, $octets) = @_;
 
+    print("vim-insert\n");
+
     if ($self->{phase} eq 'off') {
         if ($self->is_in_vim()) {
             $self->tt_paste('');
             $self->{paste_data} = $octets;
             $self->{phase} = 'ctrl-o';
+
+            return 1;
         } else {
-            $self->tt_paste($octets);
+            return $self->safe_paste($octets);
+        }
+    }
+
+    ()
+}
+
+sub safe_paste {
+    my($self, $octets) = @_;
+
+    my ($clipboard_handle, $clipboard_file_name) = tempfile(
+        SUFFIX=>'.safe-paste',
+        UNLINK=>0,
+    );
+
+    if ($octets =~ /\n/m) {
+        my $command = $self->x_resource('safe-paste.command');
+        print $clipboard_handle $octets;
+        close($clipboard_handle);
+
+        my $urxvt_pid = $$;
+        my $pid = fork;
+        if ($pid) {
+            waitpid($pid, 0);
+            return $!;
+        } else {
+            exec(($command, $urxvt_pid, $clipboard_file_name));
         }
 
-        return 1;
+        return 1
     }
+
+    ()
 }
 
 sub on_refresh_end {
