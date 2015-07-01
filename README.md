@@ -62,6 +62,7 @@ Hopefully, there is a solution.
 
 ## :tada: TADA! :tada:
 ![tada](https://cloud.githubusercontent.com/assets/674812/8426710/6d059906-1f01-11e5-8000-ba3a470630c1.gif)
+
 Also, you need to specify program, that will be used to edit clipboard and send
 result back.
 
