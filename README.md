@@ -46,6 +46,20 @@ Shift-Inserts will paste text as it expected to be done in XXI century.
 
 It will also work onto remote server vim. Waow.
 
+What's difference with "bracketed paste?"
+=========================================
+
+"Bracketed paste" requires plugin for vim and intended for pasting in vim only.
+
+urxvt-vim-insert is a plugin for terminal and redirects any paste to the new
+vim session, which can be used for **the remote sessions** as well. E.g.,
+you can safely paste multiline text directly into remote unconfigured vim and
+it will work nice.
+
+urxvt-vim-insert can be used for pasting multiline text in local or remote
+shell.
+
+urxvt-vim-insert requires no vim/shell configuration whatsoever.
 
 How about pasting multiline text directly into the shell?
 =========================================================
