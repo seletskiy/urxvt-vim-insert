@@ -1,13 +1,23 @@
 #!/bin/sh
 
 tmux_pid=$(pgrep -P$1 tmux)
-session_name=$(grep -zFxA1 -- '-s' < /proc/$tmux_pid/cmdline | cut -b3-)
+session_name=$(grep -EzxA1 -- '-s|-t' < /proc/$tmux_pid/cmdline | cut -b3-)
 current_command=$(tmux ls -F '#{session_name} #{pane_current_command}' \
     | grep -F "$session_name " | cut -f2 -d' ')
 
 if [ "$current_command" = "mcabber" ]; then
-    echo tmux send -t $session_name /esay enter i
-    tmux send -t $session_name /esay enter 'i' c-r '*' enter
+    last_line=$(tmux capture-pane -pt $session_name | tail -n1)
+
+    if ! grep -q '^$' <<< "$last_line"; then
+        erase_string=$(printf "^H %.0s" \
+            $(eval echo {1..$(wc -c <<< "$last_line")}))
+
+        # $erase_string without quotes will expand to several arguments
+        tmux send -t $session_name $erase_string \
+            '/esay' enter 'i' "$last_line" enter c-r c-o '*' enter
+    else
+        tmux send -t $session_name /esay enter 'i' c-r c-o '*' enter
+    fi
 else
     tmux neww -t $session_name "$(cat <<EOF
         $EDITOR $2;
