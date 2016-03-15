@@ -1,9 +1,14 @@
 #!/bin/sh
 
 tmux_pid=$(pgrep -P$1 tmux)
-session_name=$(grep -EzxA1 -- '-s|-t' < /proc/$tmux_pid/cmdline | cut -b3-)
-current_command=$(tmux ls -F '#{session_name} #{pane_current_command}' \
-    | grep -F "$session_name " | cut -f2 -d' ')
+IFS=' ' set $(
+    tmux list-clients \
+        -F '#{client_pid} #{session_name} #{pane_current_command}' \
+    | grep "^$tmux_pid " | cut -f2- -d' ' \
+)
+
+session_name=$1
+current_command=$2
 
 if [ "$current_command" = "mcabber" ]; then
     last_line=$(tmux capture-pane -pt $session_name | tail -n1)
