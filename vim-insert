@@ -62,8 +62,8 @@ sub on_refresh_end {
     my($self) = @_;
 
     if ($self->{phase} eq 'ctrl-o') {
-        # vim :h i_CTRL-\_CTRL-O
-        $self->tt_paste(':if@*==""|set paste|else|call feedkeys("*","n")|endif');
+        # vim :h i_CTRL-R_CTRL-O
+        $self->tt_paste(':if@*==""|set paste|else|call feedkeys("\<C-R>\<C-O>*","n")|endif');
         $self->{phase} = 'paste-mode';
         return;
     }
