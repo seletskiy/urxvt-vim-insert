@@ -36,7 +36,7 @@ sub safe_paste {
         UNLINK=>0,
     );
 
-    $octets =~ s/^\n+|\n+$//g;
+    $octets =~ s/^\n+//g;
 
     if ($octets =~ /\n/m) {
         my $command = $self->x_resource('safe-paste.command');
