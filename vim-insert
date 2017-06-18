@@ -17,7 +17,7 @@ sub on_tt_paste {
         if ($self->is_in_vim()) {
             $self->tt_paste('');
             $self->{paste_data} = $octets;
-            $self->{phase} = 'ctrl-o';
+            $self->{phase} = 'ctrl-r';
 
             return 1;
         } else {
@@ -61,9 +61,9 @@ sub safe_paste {
 sub on_refresh_end {
     my($self) = @_;
 
-    if ($self->{phase} eq 'ctrl-o') {
-        # vim :h i_CTRL-R_CTRL-O
-        $self->tt_paste(':if@*==""|set paste|else|call feedkeys("\<C-R>\<C-O>*","n")|endif');
+    if ($self->{phase} eq 'ctrl-r') {
+        # vim :h i_CTRL-R_CTRL-R
+        $self->tt_paste(':if@*==""|set paste|else|call feedkeys("\<C-R>\<C-R>*","n")|endif');
         $self->{phase} = 'paste-mode';
         return;
     }
